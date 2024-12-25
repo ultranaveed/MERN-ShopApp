@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from "dotenv";
+import cors from "cors"; // Import cors
+
 
 import { connectDB } from './config/db.js';
 import productRoutes from "./routes/product.route.js";
@@ -8,6 +10,8 @@ dotenv.config();
 
 const app = express(); // allows us to accept json data in the req.body
 const PORT = process.env.PORT
+
+app.use(cors()); // Enable CORS for all routes
 
 app.use(express.json());
 
