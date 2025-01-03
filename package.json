@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon BE/server.js"
+    "dev": "cross-env NODE_ENV=development nodemon BE/server.js",
+    "build": "npm install && npm install --prefix FE && npm run build --prefix FE",
+    "start": "cross-env NODE_ENV=production node BE/server.js"
   },
   "type": "module",
   "keywords": [],
