@@ -2,6 +2,7 @@ import { Container, VStack, Text, SimpleGrid } from "@chakra-ui/react"
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../store/product";
+import ProductCard from "../components/ProductCard";
 
 const HomePage = () => {
   const {fetchProducts, products} = useProductStore();
@@ -32,10 +33,12 @@ const HomePage = () => {
           spacing={10}
           w={"full"}
         >
-
+          {products.map((product) => (
+            <ProductCard key={product._id} product={product}/>
+          ))}
         </SimpleGrid>
 
-
+        {products.length ===0 &&(
         <Text fontSize={'xl'} textAlign={'center'} fontWeight='bold' color='gray.500'>
           No products found 😭{" "}
           <Link to={"/create"}>
@@ -45,7 +48,7 @@ const HomePage = () => {
           </Link>
 
         </Text>
-
+        )}
       </VStack>
     </Container>
   )
