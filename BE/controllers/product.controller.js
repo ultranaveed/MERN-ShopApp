@@ -23,7 +23,7 @@ export const createProduct = async (req,res) => {
 
     try {
         await newProduct.save();
-        res.status(201).json({success:true, data: newProduct});
+        res.status(201).json({success:true, message: "Product created successfully!!" ,data: newProduct});
         console.log("Product created successfully");
     } catch (error) {
         console.error("Error in Create product:", error.message);
@@ -42,7 +42,7 @@ export const updateProduct = async (req,res) => {
 
     try {
         const updatedProduct = await Product.findByIdAndUpdate(id, product, {new: true});
-        res.status(200).json({success:true, data: updatedProduct});
+        res.status(200).json({success:true, message: "Product updated successfully!!",data: updatedProduct});
         console.log("Product updated successfully");
     } catch (error) {
         res.status(500).json({success:false, message: "Server Error"});
@@ -59,7 +59,7 @@ export const deleteProduct = async (req, res) =>{
 
     try {
         await Product.findByIdAndDelete(id);
-        res.status(200).json({success:true, message: "Product Deleted!"});
+        res.status(200).json({success:true, message: "Product Deleted!!"});
         console.log("Product deleted successfully");
     } catch (error) {
         console.log("Error in deleting product: ", error.message);

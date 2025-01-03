@@ -11,10 +11,13 @@ const ProductCard = ({product}) => {
 
     const {deleteProduct, updateProduct}= useProductStore()
     const toast = useToast()
-    const {isOpen, onOpen, onClose} = useDisclosure()
+    const { isOpen: isUpdateOpen , onOpen: onUpdateOpen, onClose: onUpdateClose } = useDisclosure()
+    const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
+    
 
     const handleDeleteProduct = async (pid) => {
-        const {success,message} = await deleteProduct(pid)
+        const {success,message} = await deleteProduct(pid);
+        onDeleteClose();
         if(!success){
             toast({
                 title: "Error",
@@ -35,8 +38,26 @@ const ProductCard = ({product}) => {
     }
 
     const handleUpdateProduct = async (pid, updatedProduct) => {
-        await updateProduct(pid, updatedProduct);
-        onClose();
+        const {success, message }= await updateProduct(pid, updatedProduct);
+        onUpdateClose();
+        if(!success){
+            toast({
+                title: "Error",
+                description: message,
+                status: "error",
+                duration: 3000,
+                isClosable:true,
+            });
+        }
+        else{
+            toast({
+                title: "Success",
+                description: message,
+                status: "success",
+                duration: 3000,
+                isClosable:true,
+            });
+        }
     }
 
     return (
@@ -61,13 +82,13 @@ const ProductCard = ({product}) => {
 
         <HStack spacing={2}>
         <IconButton icon={<EditIcon />} 
-        onClick={onOpen}
+        onClick={onUpdateOpen}
         colorScheme='blue' aria-label={''}/>
-        <IconButton icon={<DeleteIcon />} onClick={() => handleDeleteProduct(product._id)} colorScheme='red' aria-label={''}/>
+        <IconButton icon={<DeleteIcon />} onClick={onDeleteOpen} colorScheme='red' aria-label={''}/>
         </HStack>
         
         </Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isUpdateOpen} onClose={onUpdateClose}>
         <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Update Product</ModalHeader>
@@ -92,12 +113,29 @@ const ProductCard = ({product}) => {
                 >
                     Update
                 </Button>
-                <Button variant='ghost' onClick={onClose}>
-                    Cancel
-                </Button>
+                <Button variant='ghost' onClick={onUpdateClose}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
+
+        <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Delete Product</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure you want to delete this product?
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='red' mr={3} onClick={() => handleDeleteProduct(product._id)}>
+              Delete
+            </Button>
+            <Button variant='ghost' onClick={onDeleteClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+
     </Box>
   )
 }
